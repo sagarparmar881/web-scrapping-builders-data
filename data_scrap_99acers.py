@@ -1,11 +1,12 @@
 import json
+import os
 import time
 import pandas as pd
 import re
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from datetime import datetime
-
+from dotenv import load_dotenv
 
 def scrap_data(url):
     """Extracts the data from every webpage into variable"""
@@ -35,7 +36,9 @@ def scrap_data(url):
 def write_csv():
     """Writes the extracted data to CSV file"""
     current_date = datetime.now().strftime("%Y_%m_%d")
-    file_name = re.search(r'(?!.*/).+', base_url.replace('-', '_')).group(0) + "_" + current_date + ".csv"
+    file_name = ('99acers_'
+                 + re.search(r'(?!.*/).+', os.getenv("BASE_URL_99_ACERS").replace('-', '_')).group(0)
+                 + "_" + current_date + ".csv")
     print("LOG: [STARTED] Writing data to CSV: " + file_name)
     builders_data = {
         "builder_name": builder_names,
@@ -44,7 +47,7 @@ def write_csv():
     }
     builders_data_scrapped = pd.DataFrame(builders_data)
     dataframe = dataframe_final._append(builders_data_scrapped, ignore_index=True)
-    dataframe.to_csv(file_name, encoding="utf-8")
+    dataframe.to_csv('data/'+file_name, encoding="utf-8")
     print("LOG: [COMPLETED] Writing data to CSV: " + file_name)
 
 
@@ -59,18 +62,17 @@ def get_total_pages(url):
 
 # ----- MAIN PROGRAM -----
 
+load_dotenv()
 
 builder_names = []
 projects_total = []
 projects_completed = []
 dataframe_final = pd.DataFrame()
 
-base_url = "https://www.99acres.com/builders-in-vadodara-bffid"
-
-total_pages = get_total_pages(base_url)
-for page in range(1, 2):
+total_pages = get_total_pages(os.getenv("BASE_URL_99_ACERS"))
+for page in range(1, total_pages+1):
     if page == 1:
-        scrap_data(base_url)
+        scrap_data(os.getenv("BASE_URL_99_ACERS"))
     else:
-        scrap_data(base_url.format(page))
+        scrap_data(os.getenv("BASE_URL_99_ACERS").format(page))
 write_csv()

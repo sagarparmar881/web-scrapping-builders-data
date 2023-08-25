@@ -37,7 +37,7 @@ def write_csv():
     """Writes the extracted data to CSV file"""
     current_date = datetime.now().strftime("%Y_%m_%d")
     file_name = ('99acers_'
-                 + re.search(r'(?!.*/).+', os.getenv("BASE_URL_99_ACERS").replace('-', '_')).group(0)
+                 + re.search(r'(?!.*/).+', base_url.replace('-', '_')).group(0)
                  + "_" + current_date + ".csv")
     print("LOG: [STARTED] Writing data to CSV: " + file_name)
     builders_data = {
@@ -69,10 +69,12 @@ projects_total = []
 projects_completed = []
 dataframe_final = pd.DataFrame()
 
-total_pages = get_total_pages(os.getenv("BASE_URL_99_ACERS"))
+base_url = os.getenv("BASE_URL_99_ACERS")
+
+total_pages = get_total_pages(base_url)
 for page in range(1, total_pages+1):
     if page == 1:
-        scrap_data(os.getenv("BASE_URL_99_ACERS"))
+        scrap_data(base_url)
     else:
-        scrap_data(os.getenv("BASE_URL_99_ACERS").format(page))
+        scrap_data(base_url+'-page-{}'.format(page))
 write_csv()

@@ -1,10 +1,10 @@
-# web-scrapping-builders-data
+# Web Scrapping Builders Data
 
-Simple overview of use/purpose.
+Extracts the data of builders from websites.
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+This repository contains a Python script that can be used to scrape data of builders and their projects from the websites 99acres and Magicbricks. The script uses the BeautifulSoup library to parse the HTML code of the websites and extract the desired data.
 
 ## Getting Started
 

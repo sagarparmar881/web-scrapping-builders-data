@@ -1,102 +1,94 @@
-# python program to extract data of top builders in vadodara from 'magicbricks'
-
-# ---- IMPORT STARTS ----
-
-# import numpy as np
-import pandas as pd
-import time
-from datetime import timedelta
-import requests
+import os
 import re
+from datetime import datetime
+
+import pandas as pd
+import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
-# -- IMPORT ENDS----
 
-# base_url = "https://www.magicbricks.com/mbutility/builders-in-Vadodara?page=1"
-# page = requests.get(base_url)
-#
-# soup = BeautifulSoup(page.content, "html.parser")
+def get_total_pages(url):
+    """This method counts total pages to srap from the website."""
+    print("LOG: [STARTED] Counting total pages to be extracted.")
+    try:
+        page_source = requests.get(url)
+    except:
+        print("LOG: [ERROR] Problem in parsing URL" + " ...")
+    else:
+        soup = BeautifulSoup(page_source.content, "html.parser")
+        counter = len(soup.find_all("li", {"class": "mb-pagination__list--item"}))
+        print("LOG: [INFO] Total pages to be extracted: " + str(counter))
+        return counter
 
-# total_number_of_webpages = len(soup.find_all("li", {"class": "mb-pagination__list--item"}))
-# print(total_number_of_webpages)
 
-# ----- MAIN STARTS -----
-start_time = time.time()
-dataframe_final = pd.DataFrame()
+def scrap_data(url):
+    """Extracts the data from every webpage into lists."""
+    try:
+        page_source = requests.get(url)
+    except:
+        print("LOG: [ERROR] Problem in scrapping data" + " ...")
+    else:
+        soup = BeautifulSoup(page_source.content, "html.parser")
+        cards = soup.find_all("div", {"class": "card"})
+        for card in cards:
+            try:
+                builder_name.append(card.find("h3").text.strip())
+            except:
+                builder_name.append(None)
 
-builder_name = []
-projects_total = []
-projects_completed = []
+            try:
+                projects_total.append(card.find("div", class_="builder__projects-total").text.strip())
+            except:
+                projects_total.append(None)
 
-total_number_of_webpages = 1
-for page in range(1, total_number_of_webpages):
-    base_url = "https://www.magicbricks.com/mbutility/builders-in-Vadodara?page={}".format(page)
-    page = requests.get(base_url)
-    soup = BeautifulSoup(page.content, "html.parser")
-    total_number_of_webpages = len(soup.find_all("li", {"class": "mb-pagination__list--item"}))
-    cards = soup.find_all("div", {"class": "card"})
+            try:
+                projects_completed.append(card.find("div", class_="builder__projects-status").text.strip())
+            except:
+                projects_completed.append(None)
 
-    for card in cards:
-        # 1. builder_name
-        try:
-            builder_name.append(card.find("h3").text.strip())
-        except:
-            builder_name.append(None)
 
-        # 2. projects_total
-        try:
-            projects_total.append(card.find("div", class_="builder__projects-total").text.strip())
-        except:
-            projects_total.append(None)
+def write_to_csv():
+    """This method writes the extracted data to CSV file"""
+    current_date = datetime.now().strftime("%d%m%Y_%H%M%S")
+    file_name_0 = 'magicbricks'
+    file_name_1 = re.search(r'(?!.*/).+', base_url.replace('-', '_')).group(0)
+    file_name = str.lower(file_name_0 + '_' + file_name_1 + '_' + current_date + '.csv')
 
-        # 3. projects_completed
-        try:
-            projects_completed.append(card.find("div", class_="builder__projects-status").text.strip())
-
-        except:
-            projects_completed.append(None)
-
-    loop_time = time.time()
-
-    # make a dictionary containing all the data extracted
-    col_dic = {
+    builders_data = {
         "name": builder_name,
         "projects_total": projects_total,
         "projects_completed": projects_completed
     }
+    builders_data_scrapped = pd.DataFrame(builders_data)
+    dataframe = dataframe_final._append(builders_data_scrapped, ignore_index=True)
+    if is_empty(dataframe):
+        print("LOG: [COMPLETED] No Data found to write CSV ...")
+    else:
+        dataframe.to_csv('data/' + file_name, encoding="utf-8")
+        print("LOG: [COMPLETED] Writing data to CSV: " + file_name)
 
-    # pass the dictionary to pandas to create a dataframe (page)
-    df = pd.DataFrame(col_dic)
 
-    # append the dataframe to the final dataframe (the whole website)
-    dataframe_final = dataframe_final._append(df, ignore_index=True)
+def is_empty(dataframe):
+    """This method checks if the extracted dataframe is empty"""
+    return dataframe.empty
 
-    # success
-    # print("success!")
-    # print("time taken:", round((time.time() - loop_time) * 1000, 2), "ms")
-    # print("total time elapsed:", str(timedelta(seconds=(time.time() - start_time))))
-    # print()
 
-# ---- MAIN ENDS ----
-end_time = time.time()
-print("full website scraped successfully!")
-print("total time taken:", str(timedelta(seconds=(end_time - start_time))))
-print()
+# ----- MAIN PROGRAM -----
 
-# Print some statistics about the final dataframe:
-print("dataframe shape", dataframe_final.shape)
-print()
-print("column-wise null count")
-print(dataframe_final.isna().sum())
-print()
 
-# export the data to external csv
-dataframe_final.to_csv("builders.csv", encoding="utf-8")
+load_dotenv()
+base_url = os.getenv("BASE_URL_MAGICBRICKS")
 
-print(builder_name)
-print(projects_total)
-print(projects_completed)
+builder_name = []
+projects_total = []
+projects_completed = []
+dataframe_final = pd.DataFrame()
 
-print(len(builder_name))
-print(len(projects_total))
-print(len(projects_completed))
+try:
+    total_pages = get_total_pages(base_url)
+    for page in range(1, total_pages + 1):
+        scrap_data(base_url + "?page={}".format(page))
+    write_to_csv()
+except:
+    print("LOG: [ERROR] Problem in program" + " ...")

@@ -78,7 +78,6 @@ def write_to_csv():
     file_name_1 = re.search(r'(?!.*/).+', base_url.replace('-', '_')).group(0)
     file_name = str.lower(file_name_0 + '_' + file_name_1[:-6] + '_' + current_date + '.csv')
 
-    print("LOG: [STARTED] Writing data to CSV: " + file_name)
     builders_data = {
         "builder_name": builder_names,
         "projects_total": projects_total,

@@ -50,6 +50,7 @@ def scrap_data(url):
 
 def write_to_csv():
     """This method writes the extracted data to CSV file"""
+    print("LOG: [STARTED] Writing data to CSV " + " ...")
     current_date = datetime.now().strftime("%d%m%Y_%H%M%S")
     file_name_0 = 'magicbricks'
     file_name_1 = re.search(r'(?!.*/).+', base_url.replace('-', '_')).group(0)

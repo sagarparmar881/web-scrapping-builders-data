@@ -118,7 +118,7 @@ The results of the data scrapped from the websites `99acres.com` and `magicbrick
 | 9      | Shreeji Infrastucture                  | 2 Projects in Vadodara  | 1 Completed        |
 | 10     | Kanha Group                            | 22 Projects in Vadodara | 11 Completed       |
 
-    [![magicbricks][magicbricks-screenshot]]()
+  [![magicbricks][magicbricks-screenshot]]()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -33,7 +33,7 @@
 <h3 align="center">Web Scrapping Builders Data</h3>
 
   <p align="center">
-    This repository contains a Python script that can be used to scrape data of builders and their projects from the websites 99acres and Magicbricks. The script uses the BeautifulSoup library to parse the HTML code of the websites and extract the desired data.
+    This repository contains a Python script that can be used to scrape data of real-estate builders and their projects from the websites '99acres.com' and 'magicbricks.com' respectively. The script uses the beautifulsoup library and selenium to parse the HTML code of the websites and extract the desired data.
     <br />
     <a href="https://github.com/sagarparmar881/web-scrapping-builders-data"><strong>Explore the docs »</strong></a>
     <br />
@@ -44,6 +44,7 @@
     ·
     <a href="https://github.com/sagarparmar881/web-scrapping-builders-data/issues">Request Feature</a>
   </p>
+
 
 
 
@@ -80,11 +81,15 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<div style="width:60px ; height:60px">
+[![99acers][99acers-screenshot]]()
+</div>
+[![magicbricks][magicbricks-screenshot]]()
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor
-for the
-following: `sagarparmar881`, `web-scrapping-builders-data`, `sagarparmar881`, `sagarparmar881`, `sagarparmar881@gmail.com_client`, `sagarparmar881@gmail.com`, `project_title`, `project_description`
+
+
+
+This repository contains a Python script that can be used to scrape data of real-estate builders and their projects from the websites '99acres.com' and 'magicbricks.com' respectively. The script uses the beautifulsoup library and selenium to parse the HTML code of the websites and extract the desired data.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -247,7 +252,10 @@ Don't forget to give the project a star! Thanks again!
 
 [linkedin-url]: https://linkedin.com/in/sagarparmar881
 
-[product-screenshot]: images/screenshot.png
+[99acers-screenshot]: screenshots/data_scrap_99acers.png
+
+[magicbricks-screenshot]: screenshots/data_scrap_magicbricks.png
+
 
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 

@@ -81,9 +81,9 @@
 
 ## About The Project
 
-<div style="width:60px ; height:60px">
+
 [![99acers][99acers-screenshot]]()
-</div>
+
 [![magicbricks][magicbricks-screenshot]]()
 
 
